@@ -19,36 +19,36 @@ echo '<th>Extension</th>' >> $file
 echo '<th>Resolution</th>' >> $file
 echo '<th>Size</th>' >> $file
 echo '<th>Location of the file</th>' >> $file
-sudo find /home/vutngson/UnixProject -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify |  awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'  | awk '{gsub(/\/.*\//,"",$1); print "<tr>" "<td>" $1 "</td>" "<td>" $2 "</td>" "<td>"$3 "</td>" "<td>"$4"</td>" "<td>"$5"</td>" "</tr>"}' >> $file
+sudo find . -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify |  awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'  | awk '{gsub(/\/.*\//,"",$1); print "<tr>" "<td>" $1 "</td>" "<td>" $2 "</td>" "<td>"$3 "</td>" "<td>"$4"</td>" "<td>"$5"</td>" "</tr>"}' >> $file
 echo '</table>' >> $file
 cat <<EOF2 >> $file
 </body>
 </html>
 EOF2
 	echo "List of media files"
-    sudo find /home/vutngson/UnixProject -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify | awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}' | awk '{gsub(/\/.*\//,"",$1); print}' | column -t
+    sudo find . -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify | awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}' | awk '{gsub(/\/.*\//,"",$1); print}' | column -t
 }
 
 # Part b
 ListSortByAlpha () {
 	echo "Sort by apha"
-    sudo find /home/vutngson/UnixProject -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify | awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'| awk '{gsub(/\/.*\//,"",$1); print }'  | sort -k1,1 | column -t 
+    sudo find . -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify | awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'| awk '{gsub(/\/.*\//,"",$1); print }'  | sort -k1,1 | column -t 
 }
 
 ListSortByExtension () {
 	echo "Sort by extension"
-    sudo find /home/vutngson/UnixProject -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify | awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'  | awk '{gsub(/\/.*\//,"",$1); print}'  | sort -k2,2 | column -t 
+    sudo find . -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify | awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'  | awk '{gsub(/\/.*\//,"",$1); print}'  | sort -k2,2 | column -t 
 }
 
 ListSortBySize () {
 	echo "Sort by size"
-    sudo find /home/vutngson/UnixProject -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify |  awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'  |  awk '{gsub(/\/.*\//,"",$1); print}' | sort -k4,4n | column -t 
+    sudo find . -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) | xargs identify |  awk '{ print $1 "\t" $2 "\t" $3 "\t" $7 "\t "$1}'  |  awk '{gsub(/\/.*\//,"",$1); print}' | sort -n -k4 | column -t 
 }
 
 # Part c
 ListOfDuplicate () {
 	echo  "highlight if there are duplicate files"
-    sudo find /home/vutngson/UnixProject -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) -printf "%f  " -exec ls -l --block-size=K {} \; | awk '{if (x[$1]) { x_count[$1]++;  print "\033[1;31m" $1 "\t" $6 "\t" $10 "\033[0m "; if (x_count[$1] == 1) { print x[$1] } } x[$1] = "\033[1;31m" $1 "\t" $6 "\t" $10 "\033[0m "}'| column -t | sort -k1,1
+    sudo find . -type f \( -iname \*.png -o -iname \*.jpg -o -iname \*.bmp \) -printf "%f  " -exec ls -l --block-size=K {} \; | awk '{if (x[$1]) { x_count[$1]++;  print "\033[1;31m" $1 "\t" $6 "\t" $10 "\033[0m "; if (x_count[$1] == 1) { print x[$1] } } x[$1] = "\033[1;31m" $1 "\t" $6 "\t" $10 "\033[0m "}'| column -t | sort -k1,1
 }
 
 MENU="
