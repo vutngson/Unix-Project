@@ -20,12 +20,97 @@ EnterBook () {
 
 # Part c
 PrintAllBook () {
-    printf "%0s %60s %20s %10s\n" "Book title" "Author(s)" "Publisher" "Year"
+	header="\n %-50s %20s %20s %11s\n"
+	printf "$header" "Book Title" "Author(s)" "Publisher" "Year" > "$fileprint"
+	printf "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> "$fileprint"
     while IFS='|' read -r title author publisher year
     do
-    printf "%0s %60s %20s %10s\n" "$title" "$author" "$publisher" "$year"
+       	printf "$header" "$title" "$author" "$publisher" "$year" >> "$fileprint"
     done < "$file"
 }
 
-#EnterBook
-PrintAllBook
+if [[ "$1" == "print" ]]; then
+	PrintAllBook
+	echo "Print all book to book_print"
+fi
+
+while getopts ":f:i:e" opt; do
+  case $opt in
+    e)
+    	echo "-e was triggered" >&2
+    	EnterBook
+    ;;
+
+    f)
+    	echo "-f was triggered, Find String: $OPTARG" >&2
+    	searchString="$OPTARG"
+    	header="\n %-50s %20s %20s %11s\n"
+		printf "$header" "Book Title" "Author(s)" "Publisher" "Year"
+		printf "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+    	while IFS='|' read -r title author publisher year
+    	do
+       		thisString="$title $author $publisher $year" 
+    		if `echo ${thisString} | grep "${searchString}" 1>/dev/null 2>&1`
+			then
+  				printf "$header" "$title" "$author" "$publisher" "$year"
+			fi
+    	done < "$file"
+
+    	if [[ "$3" == "print" ]]; then
+			header="\n %-50s %20s %20s %11s\n"
+			printf "$header" "Book Title" "Author(s)" "Publisher" "Year" > "$fileprint"
+			printf "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> "$fileprint"
+    		while IFS='|' read -r title author publisher year
+    		do
+       			thisString="$title $author $publisher $year" 
+    			if `echo ${thisString} | grep "${searchString}" 1>/dev/null 2>&1`
+				then
+  					printf "$header" "$title" "$author" "$publisher" "$year" >> "$fileprint"
+				fi
+    		done < "$file"
+			echo "Print found book to book_print"
+		fi
+	;;
+
+    i)
+    	echo "-i was triggered, Find String: $OPTARG" >&2
+    	searchString="$OPTARG"
+    	header="\n %-50s %20s %20s %11s\n"
+		printf "$header" "Book Title" "Author(s)" "Publisher" "Year"
+		printf "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+    	while IFS='|' read -r title author publisher year
+    	do
+       		thisString="$title $author $publisher $year" 
+    		if `echo ${thisString} | grep -i "${searchString}" 1>/dev/null 2>&1`
+			then
+  				printf "$header" "$title" "$author" "$publisher" "$year"
+			fi
+    	done < "$file"
+
+    	if [[ "$3" == "print" ]]; then
+			header="\n %-50s %20s %20s %11s\n"
+			printf "$header" "Book Title" "Author(s)" "Publisher" "Year" > "$fileprint"
+			printf "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" >> "$fileprint"
+    		while IFS='|' read -r title author publisher year
+    		do
+       			thisString="$title $author $publisher $year" 
+    			if `echo ${thisString} | grep -i "${searchString}" 1>/dev/null 2>&1`
+				then
+  					printf "$header" "$title" "$author" "$publisher" "$year" >> "$fileprint"
+				fi
+    		done < "$file"
+			echo "Print found book to book_print"
+		fi
+	;;
+
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+    ;;
+
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
