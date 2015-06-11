@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <linux/unistd.h>
 
 #define MAX_LENGTH 1024
 #define DELIMS " \t\r\n"
@@ -97,7 +96,6 @@ int main(int argc, char *argv[]) {
 		break;
 
 	      	else {	//no command found
-			system (line);			
 			printf ("no command found\n");
 		}
 
